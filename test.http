@@ -1,0 +1,4 @@
+# POST https://barcode-docker.cfapps.us10-001.hana.ondemand.com/barcode
+POST http://localhost:3333/barcodesplit
+
+< test_bc_multipli_doc.pdf
