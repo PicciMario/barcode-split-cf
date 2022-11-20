@@ -57,30 +57,31 @@ def barcodesplit():
 
 	# Split files and build return payload
 
-	inputpdf = PdfFileReader(io.BytesIO(request.get_data()))
+	with io.BytesIO(request.get_data()) as data:	
 
-	response_data = {}
+		inputpdf = PdfFileReader(data)
 
-	for i, element in enumerate(split_positions):
-		
-		(first_page, barcode) = element
-		
-		if i < len(split_positions)-1:
-			last_page = split_positions[i+1][0]
-		else:
-			# For the last split position, the last page
-			# is the last page of the document.
-			last_page = inputpdf.numPages
-					
-		output = PdfFileWriter()
-		
-		for page in range(first_page, last_page):
-			output.addPage(inputpdf.getPage(page))
+		response_data = {}
 
-		tmp = io.BytesIO()
-		output.write(tmp)
+		for i, element in enumerate(split_positions):
+			
+			(first_page, barcode) = element
+			
+			if i < len(split_positions)-1:
+				last_page = split_positions[i+1][0]
+			else:
+				# For the last split position, the last page
+				# is the last page of the document.
+				last_page = inputpdf.numPages
+						
+			output = PdfFileWriter()
+			
+			for page in range(first_page, last_page):
+				output.addPage(inputpdf.getPage(page))
 
-		response_data[f"part-{i}"] = (f"{i:03}-{barcode}.pdf", tmp.getvalue(), 'application/pdf')
+			with io.BytesIO() as tmp:
+				output.write(tmp)
+				response_data[f"part-{i}"] = (f"{i:03}-{barcode}.pdf", tmp.getvalue(), 'application/pdf')
 
 	# Send return payload
 

@@ -10,11 +10,11 @@ Crea un endpoint POST che riceve un PDF come payload. Individua la presenza di b
 
 - Creare immagine docker (nota: come prefisso del tag usare il proprio nome account su Docker Hub).
 
-	`docker build -t piccimario/barcode-split-cf .`
+	`docker build -t piccimario/barcode-split-cf:0.1 .`
 
 - Test in locale (viene esposta la porta 3333). L'opzione `--rm` serve a eliminare l'istanza (container) di test quando viene fermata. Le opzioni `-t` e `-i` sono utili durante i test perchè forzano l'allocazione di un terminale e lasciano il container in modalità interattiva, il che ci permette di terminarlo usando Ctrl+C.
 
-	`docker run -t -i --rm -p 3333:3333 piccimario/barcode-split-cf`
+	`docker run -t -i --rm -p 3333:3333 piccimario/barcode-split-cf:0.1`
 
 - Push su Docker Hub.
 
