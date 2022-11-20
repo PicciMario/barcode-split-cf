@@ -18,7 +18,7 @@ Crea un endpoint POST che riceve un PDF come payload. Individua la presenza di b
 
 - Push su Docker Hub.
 
-	`docker push piccimario/barcode-split-cf`
+	`docker push piccimario/barcode-split-cf:0.1`
 
 ## Caricamento immagine su Cloud Foundry:
 
@@ -26,7 +26,7 @@ Crea un endpoint POST che riceve un PDF come payload. Individua la presenza di b
 - Installare [tools cli](https://github.com/cloudfoundry/cli/releases) per Cloud Foundry.
 - `cf api https://api.cf.eu20.hana.ondemand.com` (usare endpoint cf corretto per il proprio trial)
 - `cf login`
-- `cf push barcode-docker --docker-image piccimario/barcode-split-cf --docker-username piccimario -k 512M -m 512M`
+- `cf push barcode-split --docker-image piccimario/barcode-split-cf:0.1 --docker-username piccimario -k 512M -m 512M`
 
 ---
 
