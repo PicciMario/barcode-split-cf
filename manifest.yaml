@@ -1,0 +1,10 @@
+---
+applications:
+  - name: barcode-split
+    memory: 1GB
+    disk_quota: 1GB
+    routes:
+      - route: barcode-split.cfapps.us10-001.hana.ondemand.com
+    docker:
+      image: piccimario/barcode-split-cf:0.1
+      username: piccimario

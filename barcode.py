@@ -1,15 +1,19 @@
-import os, json, re, io
+import os, json, re, io, logging, gc
 from flask import Flask, request, Response
 from pyzbar import pyzbar
 import pdf2image
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from cfenv import AppEnv
 from requests_toolbelt import MultipartEncoder
+from sap.cf_logging import flask_logging
 
 env = AppEnv()
 
 app = Flask(__name__)
-port = 3333
+# port = 3333
+
+#Iitialize logging
+flask_logging.init(app, logging.INFO)
 
 def calc_split_positions(pages, pattern=None, barcode_type='CODE128'):
 
@@ -37,6 +41,9 @@ def calc_split_positions(pages, pattern=None, barcode_type='CODE128'):
 
 @app.route('/barcodesplit', methods=['POST'])
 def barcodesplit():
+
+	logger = logging.getLogger('my.logger')
+	logger.info("Ricevuta richiesta")	
 
 	barcode_pattern = '^DOC[0-9]+$'
 	barcode_compiled_pattern = re.compile(barcode_pattern)
@@ -86,8 +93,9 @@ def barcodesplit():
 	# Send return payload
 
 	m = MultipartEncoder(response_data)
+
 	return Response(m.to_string(), mimetype=m.content_type)	
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=port)

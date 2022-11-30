@@ -5,23 +5,27 @@ from requests_toolbelt.multipart import decoder
 with open('./test_bc_multipli_doc.pdf', 'rb') as f:
 	data = f.read()
 
-# Riceve risposta dal servizio
-res = requests.post(
-	url='http://localhost:3333/barcodesplit',
-	data=data,
-	headers={'Content-Type': 'application/octet-stream'}
-)
+for i in range(100):
 
-# Estrae multipart risposta
-multipart_data = decoder.MultipartDecoder.from_response(res)
+	print(i)
 
-# Analizza singole parti del multipart
-r = re.compile('^filename="([A-Za-z0-9-\.]+)"$')
-for part in multipart_data.parts:
+	# Riceve risposta dal servizio
+	res = requests.post(
+		url='https://barcode-split.cfapps.us10-001.hana.ondemand.com/barcodesplit',
+		data=data,
+		headers={'Content-Type': 'application/octet-stream'}
+	)
 
-	headers = {k.decode(): v.decode() for k,v in dict(part.headers).items()}
-	content_disp = [x.strip() for x in headers['Content-Disposition'].split(';')]
-	filename = [r.search(x).group(1) for x in content_disp if r.match(x)][0]
+	# Estrae multipart risposta
+	multipart_data = decoder.MultipartDecoder.from_response(res)
 
-	with open(os.path.join('./', filename), 'wb') as file:
-		file.write(part.content)
+	# Analizza singole parti del multipart
+	# r = re.compile('^filename="([A-Za-z0-9-\.]+)"$')
+	# for part in multipart_data.parts:
+
+	# 	headers = {k.decode(): v.decode() for k,v in dict(part.headers).items()}
+	# 	content_disp = [x.strip() for x in headers['Content-Disposition'].split(';')]
+	# 	filename = [r.search(x).group(1) for x in content_disp if r.match(x)][0]
+
+	# 	with open(os.path.join('./', filename), 'wb') as file:
+	# 		file.write(part.content)
