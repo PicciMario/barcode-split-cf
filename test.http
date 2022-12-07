@@ -2,3 +2,17 @@
 POST http://localhost:3333/barcodesplit
 
 < test_bc_multipli_doc.pdf
+
+###
+
+POST http://localhost:3333/barcodesplit2
+
+< test_bc_multipli_doc.pdf
+
+###
+
+GET http://localhost:3333/test
+
+###
+
+GET http://localhost:3333/getfile/24433e31-3ca6-49aa-ab1b-ff16b7aab878
