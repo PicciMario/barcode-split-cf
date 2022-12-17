@@ -44,6 +44,12 @@ def calc_split_positions(pages, pattern=None, barcode_type='CODE128'):
 
 ###############################################################################
 
+@app.route('/', methods=['GET'])
+def info():
+	return(f"Barcode servuces up&running!")
+
+###############################################################################
+
 @app.route('/barcodesplit', methods=['POST'])
 def barcodesplit():
 

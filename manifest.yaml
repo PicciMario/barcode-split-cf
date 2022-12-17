@@ -1,5 +1,6 @@
 ---
 applications:
+
   - name: barcode-split
     memory: 1GB
     disk_quota: 1GB
@@ -8,3 +9,24 @@ applications:
     docker:
       image: piccimario/barcode-split-cf:0.1
       username: piccimario
+    services:
+      - barcode-split-xsuaa
+
+  - name: barcode-split-approuter
+    path: approuter/
+    memory: 128M
+    routes:
+      - route: barcode-split-approuter.cfapps.us10-001.hana.ondemand.com
+    buildpacks:
+      - nodejs_buildpack
+    env:
+      destinations: > 
+        [
+          {
+            "name":"dest-barcode-docker", 
+            "url" :"https://barcode-split.cfapps.us10-001.hana.ondemand.com", 
+            "forwardAuthToken": true
+          }
+        ]
+    services:
+      - barcode-split-xsuaa      
