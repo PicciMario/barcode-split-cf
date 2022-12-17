@@ -39,16 +39,15 @@ Creare immagine docker (nota: come prefisso del tag usare il proprio nome accoun
 ## Caricamento immagine su Docker Hub
 `docker push piccimario/barcode-split-cf:0.1`
 
-	Nota: ogni volta che si esegue il push dell'immagine sulla CF, questa ha bisogno della password dell'account Docker per il recupero. Per evitare diinserire ogni volta la password, questa può essere impostata come variabile d'ambiente (sarà usabile fino alla chiusura del terminale).
-
-	- Terminale BASH:
-		export CF_DOCKER_PASSWORD="xxxxxxxxxx"
+> Nota: ogni volta che si esegue il push dell'immagine sulla CF, questa ha bisogno della password dell'account Docker per il recupero. Per evitare diinserire ogni volta la password, questa può essere impostata come variabile d'ambiente (sarà usabile fino alla chiusura del terminale).
+>
+> Terminale BASH: export CF_DOCKER_PASSWORD="xxxxxxxxxx"
 
 ## Caricamento applicazione e approuter su Cloud Foundry:
 
 `cf push`
 
-	Nota: nel file manifest.yaml si configurano i dettagli relativi all'immagine docker da utilizzare (in particolare il nome e il prefisso, che deve corrispondere al proprio utente Docker Hub).
+> Nota: nel file manifest.yaml si configurano i dettagli relativi all'immagine docker da utilizzare (in particolare il nome e il prefisso, che deve corrispondere al proprio utente Docker Hub).
 
 ---
 
