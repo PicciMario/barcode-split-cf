@@ -6,3 +6,4 @@ gunicorn
 PyPDF2 
 requests_toolbelt 
 sap_cf_logging
+sap-xssec

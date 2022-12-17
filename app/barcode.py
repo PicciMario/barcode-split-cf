@@ -6,16 +6,62 @@ from PyPDF2 import PdfFileWriter, PdfFileReader
 from cfenv import AppEnv
 from requests_toolbelt import MultipartEncoder
 from sap.cf_logging import flask_logging
+from sap import xssec
 
 env = AppEnv()
+uaa_service = env.get_service(name='barcode-split-xsuaa').credentials
 
 app = Flask(__name__)
 
-#Iitialize logging
+# Global variables
+SECURITY_CONTEXT = "security_context"
+globals = {}
+
+# Initialize logging
 flask_logging.init(app, logging.INFO)
 
-# folder path
+# Temp folder path
 TMP_DIR = r'/tmp/'
+
+###############################################################################
+
+@app.before_request
+def check_credentials():
+
+	global globals
+
+	auth_header = request.headers.get('Authorization')
+
+	if not auth_header:
+		return "Errore: nessun header autorizzativo!", 403
+
+	try:
+		auth_token = auth_header.split(" ")[1]
+		globals[SECURITY_CONTEXT] = xssec.create_security_context(auth_token, uaa_service)
+	except:
+		return "Errore: token errato!", 403
+
+###############################################################################
+
+@app.route('/', methods=['GET'])
+def info():
+
+	global globals 
+
+	isAuthorized = globals[SECURITY_CONTEXT].check_scope(f"{uaa_service['xsappname']}.split")
+	grant_type = globals[SECURITY_CONTEXT].get_grant_type()
+	logon_name = globals[SECURITY_CONTEXT].get_logon_name()
+
+	text = (
+		f"<h1>Barcode services up&running!</h1>"
+		f"<ul>"
+		f"<li>Split scope available: {isAuthorized}</li>"
+		f"<li>Grant type: {grant_type}</li>"
+		f"<li>Logon name: {logon_name}</li>"
+		f"</ul>"
+	)
+
+	return(text)
 
 ###############################################################################
 
@@ -41,12 +87,6 @@ def calc_split_positions(pages, pattern=None, barcode_type='CODE128'):
 			
 				
 	return split_positions
-
-###############################################################################
-
-@app.route('/', methods=['GET'])
-def info():
-	return(f"Barcode servuces up&running!")
 
 ###############################################################################
 
