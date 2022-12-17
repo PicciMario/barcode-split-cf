@@ -11,9 +11,6 @@ from credentials import username, password, auth_server_url, client_id, client_s
 # aver recuperato il token. Attenzione se l'approuter è usato, per esempio, per manipolare
 # l'indirizzo chiamato mediante route.
 
-# Disabilita warning per mancata verifica del certificato del server
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
-
 ###############################################################################
 
 def get_new_token():
@@ -30,10 +27,10 @@ def get_new_token():
 
 		token_response = requests.post(
 			auth_server_url + '/oauth/token',
-			data=token_req_payload, 
-			verify=False, 
+			data = token_req_payload, 
+			#verify = False, 
 			allow_redirects=False,
-			auth=(client_id, client_secret)
+			auth = (client_id, client_secret)
 		)
 
 	elif type == 1:
@@ -48,10 +45,10 @@ def get_new_token():
 
 		token_response = requests.post(
 			auth_server_url + '/oauth/token',
-			data=token_req_payload, 
-			verify=False, 
-			allow_redirects=False,
-			auth=(client_id, client_secret)
+			data = token_req_payload, 
+			#verify = False, 
+			allow_redirects = False,
+			auth = (client_id, client_secret)
 		)
 				
 	if token_response.status_code !=200:
