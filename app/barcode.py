@@ -8,6 +8,29 @@ from requests_toolbelt import MultipartEncoder
 from sap.cf_logging import flask_logging
 from sap import xssec
 
+########################
+
+##### Scheduler
+
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+
+
+def print_date_time():
+	logger = logging.getLogger('my.logger')
+	logger.info(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=print_date_time, trigger="interval", seconds=60)
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
+
+#########################
+
 env = AppEnv()
 uaa_service = env.get_service(name='barcode-split-xsuaa').credentials
 
